@@ -1,70 +1,90 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePharmacy } from '../context/PharmacyContext';
 
 const Header: React.FC = () => {
   const { sucursalActual, cambiarSucursal } = usePharmacy();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-  const tabs = [
-    { id: 'BONIFACIO', label: 'Bonifacio', description: 'Laguna Alsina' },
-    { id: 'GUAMINI', label: 'Guaminí', description: 'Sucursal Centro' }
+  // Controlar visibilidad del header al hacer scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down - ocultar header
+        setIsVisible(false);
+      } else {
+        // Scrolling up - mostrar header
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  const sucursales = [
+    { key: 'BONIFACIO', label: 'Bonifacio' },
+    { key: 'GUAMINI', label: 'Guaminí' }
   ];
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50">
-      <div className="container-custom">
-        <div className="flex flex-col lg:flex-row items-center justify-between py-6">
-          {/* Logo y título */}
-          <motion.div 
-            className="flex items-center space-x-4 mb-4 lg:mb-0"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center">
-              <span className="text-white text-2xl font-bold">L</span>
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gradient">FARMACIA LAZARINI</h1>
-              <p className="text-gray-600 text-sm">Salud y bienestar para tu familia</p>
-            </div>
-          </motion.div>
-
-          {/* Tabs de navegación */}
-          <motion.nav 
-            className="flex space-x-2"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => cambiarSucursal(tab.id as 'BONIFACIO' | 'GUAMINI')}
-                className={`relative px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
-                  sucursalActual === tab.id
-                    ? 'bg-lazarini-green text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-lazarini-teal hover:text-white'
-                }`}
+    <AnimatePresence>
+      {isVisible && (
+        <motion.header
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -100, opacity: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-lazarini-green/20"
+        >
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center space-x-3"
               >
-                <div className="text-center">
-                  <div className="font-semibold">{tab.label}</div>
-                  <div className="text-xs opacity-90">{tab.description}</div>
+                <img
+                  src="/Lazarini/FarmaciaLogo.jpg"
+                  alt="Farmacia Lazarini"
+                  className="h-12 w-12 rounded-full object-cover shadow-md"
+                />
+                <div className="hidden sm:block">
+                  <h1 className="text-xl font-bold text-lazarini-green">
+                    FARMACIA LAZARINI
+                  </h1>
+                  <p className="text-xs text-gray-600">Salud y bienestar</p>
                 </div>
-                {sucursalActual === tab.id && (
-                  <motion.div
-                    className="absolute inset-0 rounded-lg bg-lazarini-green"
-                    layoutId="activeTab"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-              </button>
-            ))}
-          </motion.nav>
-        </div>
-      </div>
-    </header>
+              </motion.div>
+
+              {/* Tabs de sucursales */}
+              <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+                {sucursales.map((sucursal) => (
+                  <motion.button
+                    key={sucursal.key}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => cambiarSucursal(sucursal.key as 'BONIFACIO' | 'GUAMINI')}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      sucursalActual === sucursal.key
+                        ? 'bg-lazarini-green text-white shadow-md'
+                        : 'text-gray-600 hover:text-lazarini-green hover:bg-white'
+                    }`}
+                  >
+                    {sucursal.label}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.header>
+      )}
+    </AnimatePresence>
   );
 };
 

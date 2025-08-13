@@ -4,122 +4,101 @@ import { Producto } from '../config/api';
 
 interface ProductCardProps {
   producto: Producto;
-  index: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ producto, index }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ producto }) => {
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      minimumFractionDigits: 0
+    }).format(price);
+  };
+
+  const calculateDiscountedPrice = (price: number, discount: number) => {
+    return price * (1 - discount);
+  };
+
   return (
     <motion.div
-      className="card overflow-hidden group"
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ 
-        duration: 0.6, 
-        delay: index * 0.1,
-        type: "spring",
-        stiffness: 100
-      }}
       whileHover={{ 
-        y: -10,
-        transition: { duration: 0.3 }
+        scale: 1.03, 
+        y: -5,
+        boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
       }}
+      transition={{ duration: 0.3 }}
+      className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
     >
       {/* Imagen del producto */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative overflow-hidden h-48 bg-gray-100">
         <img
-          src={producto.imagen || 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=400&h=300&fit=crop'}
-          alt={producto.nombre}
+          src={producto.image}
+          alt={producto.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = 'https://via.placeholder.com/300x200/18DE56/FFFFFF?text=Producto';
+          }}
         />
         
-        {/* Badge de destacado */}
-        {producto.destacado && (
+        {/* Badge de promoción */}
+        {producto.isPromotional && (
           <motion.div
-            className="absolute top-3 left-3 bg-lazarini-green text-white px-3 py-1 rounded-full text-xs font-semibold"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.5 + index * 0.1 }}
+            className="absolute top-3 right-3 bg-gradient-to-r from-lazarini-green to-lazarini-teal text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg"
           >
-            Destacado
+            {producto.discount ? `-${Math.round(producto.discount * 100)}%` : 'Oferta'}
           </motion.div>
         )}
-
-        {/* Badge de stock */}
-        <div className="absolute top-3 right-3">
-          <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            producto.stock === 'Disponible' 
-              ? 'bg-lazarini-green text-white' 
-              : 'bg-red-500 text-white'
-          }`}>
-            {producto.stock || 'Disponible'}
-          </div>
+        
+        {/* Badge de categoría */}
+        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-lazarini-green px-3 py-1 rounded-full text-xs font-medium">
+          {producto.category}
         </div>
-
-        {/* Overlay de hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
 
       {/* Contenido del producto */}
-      <div className="p-6 space-y-4">
-        {/* Categoría */}
-        {producto.categoria && (
-          <motion.div
-            className="inline-block"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 + index * 0.1 }}
-          >
-            <span className="text-lazarini-blue text-sm font-medium bg-lazarini-blue/10 px-3 py-1 rounded-full">
-              {producto.categoria}
-            </span>
-          </motion.div>
-        )}
+      <div className="p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-lazarini-green transition-colors">
+          {producto.name}
+        </h3>
+        
+        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+          {producto.description}
+        </p>
 
-        {/* Nombre del producto */}
-        <motion.h3
-          className="text-xl font-bold text-gray-900 group-hover:text-lazarini-green transition-colors duration-300"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 + index * 0.1 }}
-        >
-          {producto.nombre}
-        </motion.h3>
+        {/* Precio */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
+            {producto.isPromotional && producto.discount ? (
+              <>
+                <span className="text-2xl font-bold text-lazarini-green">
+                  {formatPrice(calculateDiscountedPrice(producto.price, producto.discount))}
+                </span>
+                <span className="text-gray-400 line-through text-sm">
+                  {formatPrice(producto.price)}
+                </span>
+              </>
+            ) : (
+              <span className="text-2xl font-bold text-lazarini-green">
+                {formatPrice(producto.price)}
+              </span>
+            )}
+          </div>
+        </div>
 
-        {/* Descripción */}
-        <motion.p
-          className="text-gray-600 leading-relaxed"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 + index * 0.1 }}
+        {/* Botón de acción */}
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full bg-gradient-to-r from-lazarini-green to-lazarini-teal text-white py-3 px-4 rounded-xl font-semibold hover:from-lazarini-teal hover:to-lazarini-green transition-all duration-300 shadow-lg hover:shadow-xl"
         >
-          {producto.descripcion}
-        </motion.p>
-
-        {/* Precio y botón */}
-        <motion.div
-          className="flex items-center justify-between pt-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 + index * 0.1 }}
-        >
-          {producto.precio && (
-            <div className="text-2xl font-bold text-lazarini-green">
-              {producto.precio}
-            </div>
-          )}
-          
-          <motion.button
-            className="btn-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Consultar
-          </motion.button>
-        </motion.div>
+          Ver Detalles
+        </motion.button>
       </div>
-
-      {/* Indicador de hover */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-lazarini-green to-lazarini-blue transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
     </motion.div>
   );
 };
