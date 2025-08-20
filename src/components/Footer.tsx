@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Logo from './Logo';
 
 const Footer: React.FC = () => {
   return (
@@ -14,11 +15,7 @@ const Footer: React.FC = () => {
             className="lg:col-span-2"
           >
             <div className="flex items-center space-x-3 mb-4">
-              <img
-                src="/Lazarini/FarmaciaLogo.jpg"
-                alt="Farmacia Lazarini"
-                className="h-12 w-12 rounded-full object-cover"
-              />
+              <Logo size="md" />
               <h3 className="text-xl font-bold text-lazarini-green">
                 FARMACIA LAZARINI
               </h3>

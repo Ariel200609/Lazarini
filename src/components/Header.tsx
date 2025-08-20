@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePharmacy } from '../context/PharmacyContext';
+import Logo from './Logo';
 
 const Header: React.FC = () => {
   const { sucursalActual, cambiarSucursal } = usePharmacy();
@@ -49,11 +50,7 @@ const Header: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 className="flex items-center space-x-3"
               >
-                <img
-                  src="/Lazarini/FarmaciaLogo.jpg"
-                  alt="Farmacia Lazarini"
-                  className="h-12 w-12 rounded-full object-cover shadow-md"
-                />
+                <Logo size="md" />
                 <div className="hidden sm:block">
                   <h1 className="text-xl font-bold text-lazarini-green">
                     FARMACIA LAZARINI
