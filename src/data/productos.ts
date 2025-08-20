@@ -8,7 +8,7 @@ export const PRODUCTOS_DATA: Record<'BONIFACIO' | 'GUAMINI', Producto[]> = {
       name: 'Paracetamol 500mg',
       description: 'Analgésico y antipirético para el alivio del dolor y la fiebre. Ideal para dolores de cabeza, musculares y fiebre.',
       price: 2000,
-      image: 'https://res.cloudinary.com/dsmnho4qu/image/upload/v1755047753/Captura_de_pantalla_2025-08-12_193451_ouewso.png',
+      image: '',
       category: 'Medicamentos',
       isPromotional: true,
       discount: 0.2
@@ -215,7 +215,7 @@ export const PRODUCTOS_DATA: Record<'BONIFACIO' | 'GUAMINI', Producto[]> = {
       name: 'Ibuprofeno 600mg',
       description: 'Analgésico y antipirético de alta concentración. Ideal para dolores intensos y fiebre alta.',
       price: 2200,
-      image: 'https://res.cloudinary.com/dsmnho4qu/image/upload/v1755047752/download_kutgqi.jpg',
+      image: '',
       category: 'Medicamentos',
       isPromotional: false
     },
