@@ -28,7 +28,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
   // Número de WhatsApp de la farmacia
-  const WHATSAPP_NUMBER = '5492923436229'; // Farmacia Lazarini
+  const WHATSAPP_NUMBER = '5492923659973'; // Farmacia Montoya
 
   const addToCart = (producto: Producto, cantidad: number = 1) => {
     setItems(prevItems => {
@@ -93,7 +93,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const getWhatsAppMessage = () => {
     if (items.length === 0) return '';
 
-    let message = '🛒 *PEDIDO FARMACIA LAZARINI*\n\n';
+    let message = '🛒 *PEDIDO FARMACIA MONTOYA*\n\n';
     
     items.forEach((item, index) => {
       const price = item.producto.isPromotional && item.producto.discount
@@ -112,7 +112,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
     message += `💰 *TOTAL: ${formatPrice(getTotalPrice())}*\n\n`;
     message += '📍 Por favor, confirme la disponibilidad y el método de entrega.\n';
-    message += '¡Gracias por elegir Farmacia Lazarini! 💊';
+    message += '¡Gracias por elegir Farmacia Montoya! 💊';
 
     return message;
   };
@@ -152,7 +152,7 @@ export const useCart = () => {
 
 // Función helper para generar WhatsApp URL para producto individual
 export const getProductWhatsAppUrl = (producto: Producto, sucursal: string) => {
-  const WHATSAPP_NUMBER = '5492923436229'; // Farmacia Lazarini
+  const WHATSAPP_NUMBER = '5492923659973'; // Farmacia Montoya
   
   const price = producto.isPromotional && producto.discount
     ? producto.price * (1 - producto.discount)
@@ -166,7 +166,7 @@ export const getProductWhatsAppUrl = (producto: Producto, sucursal: string) => {
     }).format(price);
   };
 
-  let message = `🏥 *CONSULTA FARMACIA LAZARINI*\n\n`;
+  let message = `🏥 *CONSULTA FARMACIA MONTOYA*\n\n`;
   message += `Hola! Me interesa el siguiente producto:\n\n`;
   message += `📦 *${producto.name}*\n`;
   message += `💰 Precio: ${formatPrice(price)}`;

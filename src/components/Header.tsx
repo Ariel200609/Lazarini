@@ -53,7 +53,7 @@ const Header: React.FC = () => {
                 <Logo size="md" />
                 <div className="hidden sm:block">
                   <h1 className="text-xl font-bold text-lazarini-green">
-                    FARMACIA LAZARINI
+                    FARMACIA MONTOYA
                   </h1>
                   <p className="text-xs text-gray-600">Salud y bienestar</p>
                 </div>

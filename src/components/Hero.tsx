@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
 
   const heroData = {
     BONIFACIO: {
-      title: 'Farmacia Lazarini',
+      title: 'Farmacia Montoya',
       subtitle: 'Bonifacio - Laguna Alsina',
       description: 'Tu salud es nuestra prioridad. Ofrecemos productos farmacéuticos de calidad y atención profesional en el corazón de Laguna Alsina.',
       features: [
@@ -35,7 +35,7 @@ const Hero: React.FC = () => {
       bgImage: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1200&h=600&fit=crop'
     },
     GUAMINI: {
-      title: 'Farmacia Lazarini',
+      title: 'Farmacia Montoya',
       subtitle: 'Guaminí',
       description: 'Cuidamos de tu bienestar con productos farmacéuticos de primera calidad y un equipo de profesionales comprometidos con tu salud.',
       features: [
